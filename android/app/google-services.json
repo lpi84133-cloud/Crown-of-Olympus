@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "344599505311",
+    "project_id": "crown-of-olympus-4b70a",
+    "storage_bucket": "crown-of-olympus-4b70a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:344599505311:android:df6bb85ff17f125f2b75aa",
+        "android_client_info": {
+          "package_name": "com.olympcrown.crownofolympus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB96jJ82PTZP7KYZ9RMvzcK6KEZzE6piSI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

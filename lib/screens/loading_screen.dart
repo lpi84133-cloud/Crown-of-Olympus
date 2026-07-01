@@ -14,7 +14,12 @@ import 'menu_screen.dart';
 /// shows a left-to-right progress bar and an animated "Loading..." caption.
 /// The bar only fills to 100% at the very last moment before launching the menu.
 class LoadingScreen extends StatefulWidget {
-  const LoadingScreen({super.key});
+  /// When true (default) the screen finishes by pushing the [MenuScreen].
+  /// PortalGate renders this widget with [autoNavigate] disabled so it can
+  /// keep the branded splash artwork on screen while the gray routing runs.
+  final bool autoNavigate;
+
+  const LoadingScreen({super.key, this.autoNavigate = true});
 
   @override
   State<LoadingScreen> createState() => _LoadingScreenState();
@@ -70,7 +75,9 @@ class _LoadingScreenState extends State<LoadingScreen>
     await Future<void>.delayed(const Duration(milliseconds: 550));
     if (!mounted) return;
 
-    // From here on the app is strictly vertical.
+    if (!widget.autoNavigate) return;
+
+    // From here on the game itself is strictly vertical.
     await SystemChrome.setPreferredOrientations(const [
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,

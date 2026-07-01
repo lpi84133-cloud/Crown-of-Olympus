@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
+import '../boot/crest_config.dart';
 import '../data/progress.dart';
+import '../shell/legal_reader.dart';
 import '../ui/theme.dart';
 import 'game_screen.dart';
 import 'levels_screen.dart';
-import 'webview_screen.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
 
-  static const privacyUrl = 'https://crownofollympus.com/privacy-policy.html';
-  static const supportUrl = 'https://crownofollympus.com/support.html';
+  static String get privacyUrl => CrestConfig.privacyPolicyUrl;
+  static String get supportUrl => CrestConfig.supportUrl;
 
   @override
   State<MenuScreen> createState() => _MenuScreenState();
@@ -32,7 +33,9 @@ class _MenuScreenState extends State<MenuScreen> {
 
   void _openWeb(String title, String url) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => WebViewScreen(title: title, url: url)),
+      MaterialPageRoute(
+        builder: (_) => LegalReaderScreen(title: title, url: url),
+      ),
     );
   }
 

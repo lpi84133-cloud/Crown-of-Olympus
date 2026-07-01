@@ -2,7 +2,7 @@ name: crownofolympus
 description: "Crown of Olympus - a foggy Greek labyrinth adventure."
 publish_to: 'none'
 
-version: 1.0.1+1
+version: 1.0.1+2
 
 environment:
   sdk: ^3.12.2
@@ -12,8 +12,34 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
-  webview_flutter: ^4.10.0
-  shared_preferences: ^2.3.3
+
+  # Networking + native runtime helpers
+  http: ^1.5.0
+  connectivity_plus: ^6.1.5
+  device_info_plus: ^12.0.0
+  package_info_plus: ^8.3.1
+  url_launcher: ^6.3.2
+
+  # Storage
+  shared_preferences: ^2.5.3
+  flutter_secure_storage: ^10.0.0
+
+  # WebView shell for gray mode
+  webview_flutter: ^4.13.1
+  webview_flutter_android: ^4.11.0
+
+  # NOTE: pinned to 8.1.4 — 10.x/11.x is Kotlin-only and clashes with
+  # Flutter's built-in Kotlin support (see gray_part_pitfalls #1).
+  file_picker: 8.1.4
+
+  # Attribution + gray-flow verdict
+  appsflyer_sdk: ^6.16.2
+
+  # Firebase (push + AppCheck)
+  firebase_core: ^3.14.0
+  firebase_messaging: ^15.2.5
+  firebase_app_check: ^0.3.2+10
+  flutter_local_notifications: ^18.0.1
 
 dev_dependencies:
   flutter_test:
@@ -25,9 +51,9 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: false
-  image_path: "assets/icon.png"
-  adaptive_icon_background: "assets/icon.png"
-  adaptive_icon_foreground: "assets/icon.png"
+  image_path: "assets/icon2.png"
+  adaptive_icon_background: "assets/icon2.png"
+  adaptive_icon_foreground: "assets/icon2.png"
   min_sdk_android: 21
 
 flutter:
@@ -46,4 +72,9 @@ flutter:
     - assets/logogGreek.webp
     - assets/horizontalload.webp
     - assets/verticalload.webp
+    - assets/Vertical_Notifications_Screen.webp
+    - assets/Horizontal_Notifications_Screen.webp
+    - assets/Vertical_Nowifi_Screen.webp
+    - assets/Horizontal_Nowifi_Screen.webp
     - assets/icon.png
+    - assets/icon2.png

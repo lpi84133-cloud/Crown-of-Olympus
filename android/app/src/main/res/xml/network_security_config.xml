@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Allow cleartext traffic so that affiliate landing pages that still ship
+    HTTP-only assets (banners, tracking pixels) don't break the WebView shell.
+    System CA store is the trust anchor for HTTPS.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system"/>
+        </trust-anchors>
+    </base-config>
+</network-security-config>
