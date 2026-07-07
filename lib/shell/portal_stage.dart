@@ -317,11 +317,11 @@ class _PortalStageState extends State<PortalStage>
       '--sat:0px!important;--sar:0px!important;' +
       '--sab:0px!important;--sal:0px!important;' +
     '}' +
-    'html,body,#__nuxt,#__layout,#app,#root{' +
+    // Only neutralise the top padding of known wrapper/header elements — never
+    // html/body/#app, and never left/right/margin, or the site's own layout
+    // (columns, inner gutters built on body/#app padding) gets destroyed.
+    '.gameview-mobile-header,.app-header{' +
       'padding-top:0!important;' +
-      'padding-left:0!important;' +
-      'padding-right:0!important;' +
-      'margin-top:0!important;' +
     '}';
   function keyboardOpen() {
     if (!window.visualViewport) return false;

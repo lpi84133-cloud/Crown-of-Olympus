@@ -2,7 +2,7 @@ name: crownofolympus
 description: "Crown of Olympus - a foggy Greek labyrinth adventure."
 publish_to: 'none'
 
-version: 1.0.1+2
+version: 1.0.1+5
 
 environment:
   sdk: ^3.12.2

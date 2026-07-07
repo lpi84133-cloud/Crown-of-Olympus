@@ -197,10 +197,13 @@ class _PortalGateState extends State<PortalGate> {
     _advance(_pNetCheck);
 
     if (!online) {
-      // Product ask: white part must boot even without network on first run.
-      // We do NOT persist LaunchMode.game so a later online launch is still
-      // routed by the verdict endpoint.
-      await _finishToMenu();
+      // First run mode is still undetermined (we haven't reached config.php),
+      // so a fresh onelink install with no network MUST show the No-WiFi
+      // screen — never the white game, never the offer. Reconnect re-runs
+      // PortalGate, which then resolves the verdict (test site / gray part).
+      // The game boots offline only once the mode is already persisted as
+      // LaunchMode.game (see _run()).
+      await _finishToLost();
       return;
     }
 

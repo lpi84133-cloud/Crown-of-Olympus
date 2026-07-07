@@ -59,8 +59,11 @@ class AgentClient extends http.BaseClient {
       if (Platform.isAndroid) {
         final info = await DeviceInfoPlugin().androidInfo;
         final buildTag = info.display.isNotEmpty ? info.display : info.id;
+        // Use the marketing release ("16"), NOT version.sdkInt (API level 36).
+        final release =
+            info.version.release.isNotEmpty ? info.version.release : '15';
         final base =
-            'Mozilla/5.0 (Linux; Android ${info.version.sdkInt}; '
+            'Mozilla/5.0 (Linux; Android $release; '
             '${info.brand} ${info.model} Build/$buildTag) '
             'AppleWebKit/$wk (KHTML, like Gecko) '
             'Chrome/$chrome Mobile Safari/$wk';
