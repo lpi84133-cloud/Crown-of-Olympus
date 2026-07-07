@@ -38,7 +38,7 @@ class BeaconDispatcher {
 
   FirebaseMessaging? _fcm;
   String? _token;
-  bool _bootDone = false;
+  bool _initDone = false;
 
   /// Fired when the user taps a warm push (background / foreground) — the
   /// value is the URL from `data.url`. PortalStage listens to this and hot
@@ -53,28 +53,49 @@ class BeaconDispatcher {
   String? get token => _token;
 
   Future<void> boot() async {
-    if (_bootDone) return;
-    _bootDone = true;
+    // Phase 1 — one-time wiring that does NOT need connectivity. Registering
+    // the listeners and channel must survive an offline first run, otherwise a
+    // later online retry (No-WiFi → Reconnect) reuses this same instance and
+    // would leave the message listeners unregistered forever.
+    if (!_initDone) {
+      try {
+        await Firebase.initializeApp();
+        _fcm = FirebaseMessaging.instance;
+        FirebaseMessaging.onBackgroundMessage(_bgHandler);
+        await _wireLocalNotifications();
 
+        _fcm!.onTokenRefresh.listen((refreshed) {
+          _token = refreshed;
+          onTokenRefresh?.call(refreshed);
+        });
+        FirebaseMessaging.onMessage.listen(_onForegroundMessage);
+        FirebaseMessaging.onMessageOpenedApp.listen(_onBackgroundTap);
+
+        final cold = await _fcm!.getInitialMessage();
+        if (cold != null) _onColdTap(cold);
+
+        _initDone = true;
+      } catch (_) {
+        // Firebase genuinely unavailable — retry the whole wiring next boot().
+        return;
+      }
+    }
+
+    // Phase 2 — token acquisition needs the network and is safe to retry. On an
+    // offline first run getToken() fails; the online retry calls boot() again
+    // and finally obtains the token so the verdict POST can carry it to the
+    // backend for push targeting.
+    await _ensureToken();
+  }
+
+  /// Fetch the FCM token, retrying across boot() calls until it succeeds.
+  /// Idempotent: no-op once a token is cached.
+  Future<void> _ensureToken() async {
+    if (_token != null || _fcm == null) return;
     try {
-      await Firebase.initializeApp();
-      _fcm = FirebaseMessaging.instance;
-      FirebaseMessaging.onBackgroundMessage(_bgHandler);
-      await _wireLocalNotifications();
-
       _token = await _fcm!.getToken();
-      _fcm!.onTokenRefresh.listen((refreshed) {
-        _token = refreshed;
-        onTokenRefresh?.call(refreshed);
-      });
-
-      FirebaseMessaging.onMessage.listen(_onForegroundMessage);
-      FirebaseMessaging.onMessageOpenedApp.listen(_onBackgroundTap);
-
-      final cold = await _fcm!.getInitialMessage();
-      if (cold != null) _onColdTap(cold);
     } catch (_) {
-      // Firebase not configured: push disabled, everything else continues.
+      // Still offline / FCM not reachable — a later boot() will retry.
     }
   }
 
